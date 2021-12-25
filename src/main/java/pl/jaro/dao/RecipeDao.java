@@ -18,29 +18,27 @@ public class RecipeDao {
     private static final String DELETE_RECIPE_QUERY = "DELETE FROM recipe where id = ?;";
     private static final String FIND_ALL_RECIPES_QUERY = "select *from recipe where admin_id =?";
     private static final String READ_RECIPE_QUERY = "SELECT * from recipe where id = ?;";
-    private static final String UPDATE_RECIPE_QUERY = "UPDATE recipe SET name = ? , ingredients =?, description = ?, updated = ?, preparation_time = ?, preparation = ? WHERE	id = ?;";
+    private static final String UPDATE_RECIPE_QUERY = "UPDATE recipe SET name = ? , ingredients =?, description = ?, created = ?, updated = ?, preparation_time = ?, preparation = ? WHERE	id = ?;";
+
     private static final String FIND_ALL_SORTED_DATE = "select * from recipe order by created desc;";
     private static final String FIND_RECIPE_BY_NAME = "select * from recipe where name=?;";
 
     public Recipe read(Integer recipeId) {
         Recipe recipe = new Recipe();
-
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(READ_RECIPE_QUERY)
-        ) {
+             PreparedStatement statement = connection.prepareStatement(READ_RECIPE_QUERY)) {
             statement.setInt(1, recipeId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     recipe.setId(resultSet.getInt("id"));
                     recipe.setName(resultSet.getString("name"));
                     recipe.setIngredients(resultSet.getString("ingredients"));
-                    recipe.setDescription(resultSet.getString("descriptions"));
+                    recipe.setDescription(resultSet.getString("description"));
                     recipe.setCreated(resultSet.getString("created"));
                     recipe.setUpdated(resultSet.getString("updated"));
                     recipe.setPreparationTime(resultSet.getInt("preparation_time"));
                     recipe.setPreparation(resultSet.getString("preparation"));
                     recipe.setAdminId(resultSet.getInt("admin_id"));
-
                 }
             }
         } catch (Exception e) {
@@ -81,23 +79,25 @@ public class RecipeDao {
     }
 
 
-    public Recipe create(Recipe recipe) {
+    public Recipe create(Recipe recipe,Integer adminId) {
+
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(CREATE_RECIPE_QUERY,
+             PreparedStatement insertStm = connection.prepareStatement(CREATE_RECIPE_QUERY,
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1,recipe.getName());
-            statement.setString(2, recipe.getIngredients());
-            statement.setString(3, recipe.getDescription());
-            statement.setInt(4, recipe.getPreparationTime());
-            statement.setString(5, recipe.getPreparation());
-            statement.setInt(6, 2);
-            int result = statement.executeUpdate();
+            insertStm.setString(1, recipe.getName());
+            insertStm.setString(2, recipe.getIngredients());
+            insertStm.setString(3, recipe.getDescription());
+            insertStm.setInt(4, recipe.getPreparationTime());
+            insertStm.setString(5, recipe.getPreparation());
+            insertStm.setInt(6, adminId);
+
+            int result = insertStm.executeUpdate();
 
             if (result != 1) {
                 throw new RuntimeException("Execute update returned " + result);
             }
 
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = insertStm.getGeneratedKeys()) {
                 if (generatedKeys.first()) {
                     recipe.setId(generatedKeys.getInt(1));
                     return recipe;

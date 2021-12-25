@@ -45,13 +45,15 @@ public class RecipeAdd extends HttpServlet {
             recipe.setName(name);
             recipe.setIngredients(ingredients);
             recipe.setDescription(description);
-            recipe.setCreated(LocalDateTime.now());
-            recipe.setUpdated(LocalDateTime.now());
+            recipe.setCreated(LocalDateTime.now().toString());
+            recipe.setUpdated(LocalDateTime.now().toString());
             recipe.setPreparationTime(Integer.parseInt(preparationTime));
             recipe.setPreparation(preparation);
             recipe.setAdminId(admins.getId());
+            System.out.println(recipe);
 
-            recipeDao.create(recipe);
+
+            recipeDao.create(recipe,admins.getId());
             response.sendRedirect("/app/recipe/list");
         }
 
