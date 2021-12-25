@@ -28,8 +28,8 @@ public class AdminDao {
             try(ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()){
                     admin.setId(resultSet.getInt("id"));
-                    admin.setFirstName(resultSet.getString("firstName"));
-                    admin.setLastName(resultSet.getString("lastName"));
+                    admin.setFirstName(resultSet.getString("first_name"));
+                    admin.setLastName(resultSet.getString("last_name"));
                     admin.setEmail(resultSet.getString("email"));
                     admin.setPassword(resultSet.getString("password"));
                     admin.setSuperadmin(resultSet.getInt("superadmin"));
@@ -52,8 +52,8 @@ public class AdminDao {
             while (resultSet.next()){
                 Admins adminsToAdd = new Admins();
                 adminsToAdd.setId(resultSet.getInt("id"));
-                adminsToAdd.setFirstName(resultSet.getString("firstName"));
-                adminsToAdd.setLastName(resultSet.getString("lastName"));
+                adminsToAdd.setFirstName(resultSet.getString("first_name"));
+                adminsToAdd.setLastName(resultSet.getString("last_name"));
                 adminsToAdd.setEmail(resultSet.getString("email"));
                 adminsToAdd.setPassword(resultSet.getString("password"));
                 adminsToAdd.setSuperadmin(resultSet.getInt("superadmin"));
@@ -129,4 +129,42 @@ public class AdminDao {
             e.printStackTrace();
         }
      }
+
+    public boolean isEmail(String email){
+        if (email == null || email.isEmpty()){
+            System.out.println("null or empty");
+            return false;
+        }
+        return email.matches(".+@.+");
+    }
+
+    public boolean ifExists(String email){
+        List<Admins> allAdmins = findAll();
+        for (Admins admin : allAdmins){
+            if (admin.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean loginValidate(String email, String password){
+        List<Admins> allAdmins = findAll();
+        for (Admins a : allAdmins){
+            if (a.getEmail().equals(email) && BCrypt.checkpw(password,a.getPassword())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Admins getUserInfo(String email){
+        List<Admins> allAdmins = findAll();
+        for (Admins a : allAdmins){
+            if (a.getEmail().equals(email)){
+                return a;
+            }
+        }
+        return null;
+    }
 }

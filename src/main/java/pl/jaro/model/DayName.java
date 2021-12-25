@@ -5,6 +5,22 @@ public class DayName {
     private String name;
     private String displayOrder;
 
+    public DayName() {
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDisplayOrder(String displayOrder) {
+        this.displayOrder = displayOrder;
+    }
+
     @Override
     public String toString() {
         return "DayName{" +
