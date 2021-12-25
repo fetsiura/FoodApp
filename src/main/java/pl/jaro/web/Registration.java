@@ -22,13 +22,6 @@ public class Registration extends HttpServlet {
         String repassword = request.getParameter("repassword");
 
 
-        System.out.println(name);
-        System.out.println(lastname);
-        System.out.println(email);
-        System.out.println(password);
-        System.out.println(repassword);
-
-
         if ((name == null || name.isEmpty()) ||
                 (lastname == null || lastname.isEmpty()) ||
                 (email == null || email.isEmpty()) ||

@@ -2,6 +2,7 @@ package pl.jaro.dao;
 
 import pl.jaro.exception.NotFoundException;
 import pl.jaro.model.Book;
+import pl.jaro.model.LastPlan;
 import pl.jaro.model.Plan;
 import pl.jaro.utils.DbUtil;
 
@@ -16,11 +17,12 @@ public class PlanDao {
 
     private static final String CREATE_PLAN_QUERY = "INSERT INTO plan(name, description, admin_id) VALUES (?,?,?);";
     private static final String DELETE_PLAN_QUERY = "DELETE FROM plan where id = ?;";
-    private static final String FIND_ALL_PLANS_QUERY = "SELECT * FROM plan;";
+    private static final String FIND_ALL_PLANS_QUERY = "select * from plan where admin_id = ?;";
     private static final String READ_PLAN_QUERY = "SELECT * from plan where id = ?;";
+    private static final String READ_NAME_OF_LAST_PLAN_QUERY = "SELECT * FROM plan where admin_id = ? ORDER BY ID DESC LIMIT 1";
     private static final String UPDATE_PLAN_QUERY = "UPDATE	plan SET name = ? , description = ? WHERE	id = ?;";
-    private static final String FIND_LAST_PLAN_QUERY = "SELECT * FROM plan WHERE id=(SELECT max(id) FROM plan);";
-
+    private static final String FIND_LAST_PLAN_QUERY = "SELECT day_name.name as day_name, meal_name,recipe.name as recipe_name, recipe.description as recipe_description\n" +
+            "FROM `recipe_plan` JOIN day_name on day_name.id=day_name_id JOIN recipe on recipe.id=recipe_id WHERE recipe_plan.plan_id =  (SELECT MAX(id) from plan WHERE admin_id = ?) ORDER by day_name.display_order, recipe_plan.display_order;";
 
     public Plan read(Integer planId) {
         Plan plan = new Plan();
@@ -43,30 +45,31 @@ public class PlanDao {
         return plan;
 
     }
+    public Plan readName(int adminId) {
+        Plan plan = new Plan();
 
-
-    public List<Plan> findAll() {
-        List<Plan> planList = new ArrayList<>();
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_PLANS_QUERY);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                Plan planToAdd = new Plan();
-                planToAdd.setId(resultSet.getInt("id"));
-                planToAdd.setName(resultSet.getString("name"));
-                planToAdd.setDescription(resultSet.getString("description"));
-                planToAdd.setCreated(resultSet.getString("created"));
-                planToAdd.setAdminId(resultSet.getInt("admin_id"));
-                planList.add(planToAdd);
+             PreparedStatement statement = connection.prepareStatement(READ_NAME_OF_LAST_PLAN_QUERY)
+        ) {
+            statement.setInt(1, adminId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    plan.setId(resultSet.getInt("id"));
+                    plan.setName(resultSet.getString("name"));
+                    plan.setDescription(resultSet.getString("description"));
+                    plan.setCreated(resultSet.getString("created"));
+                    plan.setAdminId(resultSet.getInt("admin_id"));
+                }
             }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return planList;
+        return plan;
 
     }
+
+
+
 
 
     public Plan create(Plan plan) {
@@ -96,7 +99,19 @@ public class PlanDao {
         }
         return null;
     }
+    public void update(Plan plan) {
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAN_QUERY)) {
+            statement.setInt(3, plan.getId());
+            statement.setString(1, plan.getName());
+            statement.setString(2, plan.getDescription());
 
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void delete(Integer planId) {
         try (Connection connection = DbUtil.getConnection();
@@ -114,18 +129,49 @@ public class PlanDao {
     }
 
 
-    public void update(Plan plan) {
+    public List<Plan> findAll(int adminId) {
+        List<Plan> planList = new ArrayList<>();
+        String query = FIND_ALL_PLANS_QUERY.replace("?",String.valueOf(adminId));
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAN_QUERY)) {
-            statement.setInt(3, plan.getId());
-            statement.setString(1, plan.getName());
-            statement.setString(2, plan.getDescription());
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
-            statement.executeUpdate();
+            while (resultSet.next()) {
+                Plan planToAdd = new Plan();
+                planToAdd.setId(resultSet.getInt("id"));
+                planToAdd.setName(resultSet.getString("name"));
+                planToAdd.setDescription(resultSet.getString("description"));
+                planToAdd.setCreated(resultSet.getString("created"));
+                planToAdd.setAdminId(resultSet.getInt("admin_id"));
+                planList.add(planToAdd);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return planList;
+
+    }
+
+    public List<LastPlan> last(int adminId) {
+
+        String query = FIND_LAST_PLAN_QUERY.replace("?",String.valueOf(adminId));
+        List<LastPlan> plans = new ArrayList<>();
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                LastPlan last = new LastPlan();
+                last.setDayName(resultSet.getString("day_name"));
+                last.setMealName(resultSet.getString("meal_name"));
+                last.setRecipeName(resultSet.getString("recipe_name"));
+                last.setRecipeDescription(resultSet.getString("recipe_description"));
+                plans.add(last);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return plans;
     }
 
 }

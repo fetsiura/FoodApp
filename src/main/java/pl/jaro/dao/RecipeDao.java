@@ -16,7 +16,7 @@ public class RecipeDao {
 
     private static final String CREATE_RECIPE_QUERY = "INSERT INTO recipe(name,ingredients,description,preparation_time,preparation,admin_id) VALUES (?,?,?,?,?,?);";
     private static final String DELETE_RECIPE_QUERY = "DELETE FROM recipe where id = ?;";
-    private static final String FIND_ALL_RECIPES_QUERY = "SELECT * FROM recipe;";
+    private static final String FIND_ALL_RECIPES_QUERY = "select *from recipe where admin_id =?";
     private static final String READ_RECIPE_QUERY = "SELECT * from recipe where id = ?;";
     private static final String UPDATE_RECIPE_QUERY = "UPDATE recipe SET name = ? , ingredients =?, description = ?, updated = ?, preparation_time = ?, preparation = ? WHERE	id = ?;";
     private static final String FIND_ALL_SORTED_DATE = "select * from recipe order by created desc;";
@@ -50,10 +50,12 @@ public class RecipeDao {
 
     }
 
-    public List<Recipe> findAll() {
+    public List<Recipe> findAll(int adminId) {
         List<Recipe> recipeList = new ArrayList<>();
+        String query = FIND_ALL_RECIPES_QUERY.replace("?",String.valueOf(adminId));
+
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_RECIPES_QUERY);
+             PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -88,7 +90,7 @@ public class RecipeDao {
             statement.setString(3, recipe.getDescription());
             statement.setInt(4, recipe.getPreparationTime());
             statement.setString(5, recipe.getPreparation());
-            statement.setInt(6, 1);
+            statement.setInt(6, 2);
             int result = statement.executeUpdate();
 
             if (result != 1) {

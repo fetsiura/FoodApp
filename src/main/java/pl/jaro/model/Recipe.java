@@ -9,8 +9,8 @@ public class Recipe {
     private String name;
     private String ingredients;
     private String description;
-    private String created;
-    private String updated;
+    private LocalDateTime created;
+    private LocalDateTime updated;
     private int preparationTime;
     private String preparation;
     private int adminId;
@@ -30,6 +30,8 @@ public class Recipe {
                 ", adminId=" + adminId +
                 '}';
     }
+
+    public Recipe(){}
 
     public int getId() {
         return id;
@@ -63,19 +65,19 @@ public class Recipe {
         this.description = description;
     }
 
-    public String getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
-    public String getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(String updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 
@@ -103,15 +105,12 @@ public class Recipe {
         this.adminId = adminId;
     }
 
-    public Recipe(){}
-
-    public Recipe(int id, String name, String ingredients, String description, int preparationTime, String preparation, int adminId) {
-        this.id = id;
+    public Recipe(String name, String ingredients, String description, LocalDateTime created, LocalDateTime updated, int preparationTime, String preparation, int adminId) {
         this.name = name;
         this.ingredients = ingredients;
         this.description = description;
-        this.created = LocalDateTime.now().toString();
-        this.updated =LocalDateTime.now().toString();
+        this.created = created;
+        this.updated = updated;
         this.preparationTime = preparationTime;
         this.preparation = preparation;
         this.adminId = adminId;

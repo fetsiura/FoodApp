@@ -10,8 +10,7 @@ public class Plan {
     private String created;
     private int adminId;
 
-    public Plan(int id, String name, String description, int adminId) {
-        this.id = id;
+    public Plan( String name, String description, int adminId) {
         this.name = name;
         this.description = description;
         this.created = LocalDateTime.now().toString();
@@ -62,7 +61,7 @@ public class Plan {
     }
 
     public void setCreated(String created) {
-        this.created = LocalDateTime.now().toString();
+        this.created = created;
     }
 
     public int getAdminId() {
