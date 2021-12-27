@@ -16,13 +16,13 @@
                         </a>
                     </div>
                     <div class="menu-item border-dashed">
-                        <a href="">
+                        <a href="/app/plan/add">
                             <i class="far fa-plus-square icon-plus-square"></i>
                             <span class="title">dodaj plan</span>
                         </a>
                     </div>
                     <div class="menu-item border-dashed">
-                        <a href="">
+                        <a href="/app/recipe/plan/add">
                             <i class="far fa-plus-square icon-plus-square"></i>
                             <span class="title">dodaj przepis do planu</span>
                         </a>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="alert-item alert-light">
                         <i class="far icon-calendar fa-calendar-alt"></i>
-                        <span class="font-weight-bold">Liczba planów: ${quantityOfPlans}</span>
+                        <span class="font-weight-bold">Liczba planów: ${plans}</span>
                     </div>
                 </div>
             </div>

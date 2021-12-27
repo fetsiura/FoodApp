@@ -6,6 +6,7 @@ public class LastPlan {
     private String mealName;
     private String recipeName;
     private String recipeDescription;
+    private Integer recipeId;
 
     @Override
     public String toString() {
@@ -14,7 +15,16 @@ public class LastPlan {
                 ", mealName='" + mealName + '\'' +
                 ", recipeName='" + recipeName + '\'' +
                 ", recipeDescription='" + recipeDescription + '\'' +
+                ", recipeId=" + recipeId +
                 '}';
+    }
+
+    public Integer getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(Integer recipeId) {
+        this.recipeId = recipeId;
     }
 
     public String getDayName() {
@@ -50,6 +60,7 @@ public class LastPlan {
     }
 
     public LastPlan(){}
+
     public LastPlan(String dayName, String mealName, String recipeName, String recipeDescription) {
         this.dayName = dayName;
         this.mealName = mealName;

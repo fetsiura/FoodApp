@@ -32,11 +32,10 @@ public class Dashboard extends HttpServlet {
         PlanDao planDao = new PlanDao();
         RecipeDao recipeDao = new RecipeDao();
 
-        List<LastPlan> last = planDao.last(admins.getId());
-        request.setAttribute("lastPlans",last); /// ostatni plan dla zadanego użytkownika
-        session.setAttribute("lastPlans",last); //// dodaję żeby potem wyciągnąć szczegóły
+        request.setAttribute("lastPlans",planDao.last(admins.getId())); /// ostatni plan dla zadanego użytkownika
+        session.setAttribute("lastPlans",planDao.last(admins.getId())); //// dodaję żeby potem wyciągnąć szczegóły
 
-        request.setAttribute("quantityOfPlans",planDao.findAll(admins.getId()).size()); /// ilość planów
+        request.setAttribute("plans",planDao.findAllSortedByCreated(admins.getId()).size()); /// ilość planów
         request.setAttribute("quantityOfRecipes",recipeDao.findAll(admins.getId()).size()); /// ilość recepty
 
         Plan plan = planDao.readName(admins.getId());
