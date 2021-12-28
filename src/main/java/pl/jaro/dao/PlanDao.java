@@ -17,16 +17,18 @@ public class PlanDao {
 
     private static final String CREATE_PLAN_QUERY = "INSERT INTO plan(name, description, created, admin_id) VALUES (?,?,?,?);";
     private static final String DELETE_PLAN_QUERY = "DELETE FROM plan where id = ?;";
+    private static final String DELETE_RECIPE_FROM_PLAN = "delete recipe_plan from recipe_plan where id = ?";
     private static final String READ_PLAN_QUERY = "SELECT * from plan where id = ?;";
     private static final String FIND_ALL_SORTED_BY_CREATED = "select * from plan where admin_id = ? order by created;";
     private static final String READ_NAME_OF_LAST_PLAN_QUERY = "SELECT * FROM plan where admin_id = ? ORDER BY ID DESC LIMIT 1";
     private static final String UPDATE_PLAN_QUERY = "UPDATE	plan SET name = ? , description = ?, created =? WHERE	id = ?;";
     private static final String FIND_LAST_PLAN_QUERY = "SELECT day_name.name as day_name, meal_name,recipe.name as recipe_name, recipe.description as recipe_description\n" +
             "FROM `recipe_plan` JOIN day_name on day_name.id=day_name_id JOIN recipe on recipe.id=recipe_id WHERE recipe_plan.plan_id =  (SELECT MAX(id) from plan WHERE admin_id = ?) ORDER by day_name.display_order, recipe_plan.display_order;";
-    private static final String DETAILS_OF_SOME_PLAN = "SELECT recipe_id as recipe_id, day_name.name as day_name, meal_name, recipe.name as recipe_name, recipe.description as recipe_description FROM `recipe_plan`\n" +
+    private static final String DETAILS_OF_SOME_PLAN = "SELECT recipe_plan.id as id, recipe_id as recipe_id, day_name.name as day_name, meal_name, recipe.name as recipe_name, recipe.description as recipe_description FROM `recipe_plan`\n" +
             "         JOIN day_name on day_name.id=day_name_id\n" +
             "         JOIN recipe on recipe.id=recipe_id WHERE plan_id = ?\n" +
             "ORDER by day_name.display_order, recipe_plan.display_order;";
+
 
     public Plan read(Integer planId) {
         Plan plan = new Plan();
@@ -135,6 +137,20 @@ public class PlanDao {
             e.printStackTrace();
         }
     }
+    public void deleteRecipeFromPlan(Integer planId) {
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_FROM_PLAN)) {
+            statement.setInt(1, planId);
+            statement.executeUpdate();
+
+            boolean deleted = statement.execute();
+            if (!deleted) {
+                throw new NotFoundException("Product not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -191,6 +207,8 @@ public class PlanDao {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 LastPlan last = new LastPlan();
+
+                last.setId(resultSet.getInt("id"));
                 last.setRecipeId(resultSet.getInt("recipe_id"));
                 last.setDayName(resultSet.getString("day_name"));
                 last.setMealName(resultSet.getString("meal_name"));

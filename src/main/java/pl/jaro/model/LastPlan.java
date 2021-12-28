@@ -2,6 +2,7 @@ package pl.jaro.model;
 
 public class LastPlan {
 
+    private Integer id;
     private String dayName;
     private String mealName;
     private String recipeName;
@@ -11,12 +12,21 @@ public class LastPlan {
     @Override
     public String toString() {
         return "LastPlan{" +
-                "dayName='" + dayName + '\'' +
+                "id=" + id +
+                ", dayName='" + dayName + '\'' +
                 ", mealName='" + mealName + '\'' +
                 ", recipeName='" + recipeName + '\'' +
                 ", recipeDescription='" + recipeDescription + '\'' +
                 ", recipeId=" + recipeId +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getRecipeId() {
@@ -61,10 +71,12 @@ public class LastPlan {
 
     public LastPlan(){}
 
-    public LastPlan(String dayName, String mealName, String recipeName, String recipeDescription) {
+    public LastPlan(Integer id, String dayName, String mealName, String recipeName, String recipeDescription, Integer recipeId) {
+        this.id = id;
         this.dayName = dayName;
         this.mealName = mealName;
         this.recipeName = recipeName;
         this.recipeDescription = recipeDescription;
+        this.recipeId = recipeId;
     }
 }
