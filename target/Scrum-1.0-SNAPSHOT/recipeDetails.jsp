@@ -50,12 +50,13 @@
                     </div>
                     <div class="row d-flex">
                         <div class="col-5 p-4">
-                            <p>${recipe.preparation}</p>
+                            <textarea class="w-100 p-1" name="preparation" rows="10">${recipe.preparation}</textarea>
                         </div>
                         <div class="col-2"></div>
-                        <ul class="col-5 p-4 list-unstyled">
-                            <li>${recipe.ingredients}</li>
-                        </ul>
+
+                        <div class="col-5 p-4">
+                            <textarea class="w-100 p-1" name="ingredients" rows="10"> ${recipe.ingredients}</textarea>
+                        </div>
                     </div>
 
                 </div>

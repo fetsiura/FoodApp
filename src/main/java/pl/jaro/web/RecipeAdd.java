@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet( "/app/recipe/add")
 public class RecipeAdd extends HttpServlet {
@@ -45,14 +46,13 @@ public class RecipeAdd extends HttpServlet {
             recipe.setName(name);
             recipe.setIngredients(ingredients);
             recipe.setDescription(description);
-            recipe.setCreated(LocalDateTime.now().toString());
-            recipe.setUpdated(LocalDateTime.now().toString());
+            recipe.setCreated(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
+            recipe.setUpdated(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString());
             recipe.setPreparationTime(Integer.parseInt(preparationTime));
             recipe.setPreparation(preparation);
             recipe.setAdminId(admins.getId());
-            System.out.println(recipe);
 
-
+            System.out.println(recipe.toString());
             recipeDao.create(recipe,admins.getId());
             response.sendRedirect("/app/recipe/list");
         }

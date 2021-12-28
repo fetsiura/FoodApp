@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet( "/app/plan/add")
 public class PlanAdd extends HttpServlet {
@@ -34,8 +35,9 @@ public class PlanAdd extends HttpServlet {
             Plan plan = new Plan();
             plan.setName(name);
             plan.setDescription(description);
+            plan.setCreated(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             plan.setAdminId(admins.getId());
-            plan.setCreated(LocalDateTime.now().toString());
+
             planDao.create(plan);
 
             response.sendRedirect("/app/plan/list");

@@ -5,7 +5,14 @@
 <section class="dashboard-section">
     <div class="row dashboard-nowrap">
         <%@include file="static/leftMenu.jsp"%>
+        <c:if test="${not empty error}">
+            <script>
+                window.addEventListener("load",function(){
+                    alert("${error}");
+                })
 
+            </script>
+        </c:if>
         <div class="m-4 p-4 width-medium">
             <div class="dashboard-header m-4">
                 <div class="dashboard-menu">

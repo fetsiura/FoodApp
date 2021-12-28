@@ -24,7 +24,6 @@ public class DayNameDao {
                 DayName day = new DayName();
                 day.setId(resultSet.getInt("id"));
                 day.setName(resultSet.getString("name"));
-                day.setDisplayOrder(resultSet.getString("displayOrder"));
                 dayNames.add(day);
 
             }

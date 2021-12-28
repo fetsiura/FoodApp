@@ -29,14 +29,12 @@ public class RecipeDetails extends HttpServlet {
 
                 RecipeDao recipeDao = new RecipeDao();
                 request.setAttribute("recipe",recipeDao.read(Integer.parseInt(id)));
+                if(recipeDao.read(Integer.parseInt(id)).getName()==null){
+                    request.setAttribute("error","Nie ma takiego przepisu");
+                }
 
             } catch (NumberFormatException e){
-                request.setAttribute("error", "Nie istnieje takiego przepisu");
-
-
-
-                getServletContext().getRequestDispatcher("/recipes.jsp")
-                        .forward(request, response);
+                request.setAttribute("error", "Nie ma takiego przepisu");
             }
         }
 
