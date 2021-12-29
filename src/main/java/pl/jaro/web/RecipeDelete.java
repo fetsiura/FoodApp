@@ -24,7 +24,7 @@ public class RecipeDelete extends HttpServlet {
                 response.sendRedirect("/app/recipe/list");
             }catch (NumberFormatException e){
                 e.printStackTrace();
-                request.setAttribute("error","W planie nie ma takiego przepisu");
+                request.setAttribute("error","nie ma takiego przepisu");
                 getServletContext().getRequestDispatcher("/recipes.jsp")
                         .forward(request,response);
             }

@@ -44,7 +44,7 @@ public class Registration extends HttpServlet {
             admins.setLastName(lastname);
             admins.setEmail(email);
             admins.setPassword(password);
-            admins.setSuperadmin(1);
+            admins.setSuperadmin(2);
             admins.setEnable(1);
 
             request.setAttribute("error",null);

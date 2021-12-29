@@ -58,6 +58,7 @@ public class UserEdit extends HttpServlet {
         }
         session.removeAttribute("error");
 
+
         getServletContext().getRequestDispatcher("/userEdit.jsp")
                 .forward(request, response);
     }

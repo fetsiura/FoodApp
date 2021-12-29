@@ -37,6 +37,12 @@ public class Dashboard extends HttpServlet {
         Plan plan = planDao.readName(admins.getId());
         request.setAttribute("lastPlan",plan);
 
+        if(session.getAttribute("error")!=null){
+            request.setAttribute("error",session.getAttribute("error"));
+        }
+
+        session.removeAttribute("error");
+
         getServletContext().getRequestDispatcher("/dashboard.jsp")
                 .forward(request,response);
     }

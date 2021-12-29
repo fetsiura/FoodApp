@@ -49,6 +49,9 @@ public class UserEditPassword extends HttpServlet {
         }
         session.removeAttribute("error");
 
+        Admins admins = (Admins) session.getAttribute("admin");
+        request.setAttribute("admin",admins);
+
         getServletContext().getRequestDispatcher("/userPassword.jsp")
                 .forward(request, response);
     }

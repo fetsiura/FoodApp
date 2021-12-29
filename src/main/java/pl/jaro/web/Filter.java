@@ -16,9 +16,14 @@ public class Filter implements javax.servlet.Filter {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
         HttpSession session = servletRequest.getSession();
+        Integer status = (Integer) session.getAttribute("userStatus");
+
         if (session.getAttribute("adminId")==null){
             servletResponse.sendRedirect("/login");
-        }else {
+        } else if(status ==2) {
+            session.setAttribute("error","Zostałeś zablokowany, skontaktuj się z administratorem");
+            servletResponse.sendRedirect("/login");
+        } else {
             chain.doFilter(request, response);
         }
     }

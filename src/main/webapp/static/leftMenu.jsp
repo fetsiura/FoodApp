@@ -31,11 +31,19 @@
             <i class="fas fa-angle-right"></i>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/super/admins/users">
-            <span>Użytkownicy</span>
-            <i class="fas fa-angle-right"></i>
-        </a>
-    </li>
+    <c:choose>
+        <c:when test="${admin.superadmin=='1'}">
+            <li class="nav-item">
+                <a class="nav-link disabled" href="/app/super/user/list">
+                    <span>Użytkownicy</span>
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            </li>
+        </c:when>
+        <c:otherwise>
+
+        </c:otherwise>
+    </c:choose>
+
 </ul>
 

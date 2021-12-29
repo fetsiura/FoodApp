@@ -29,6 +29,11 @@ public class Login extends HttpServlet {
             session.setAttribute("adminId",currentAdmin.getId());
             session.setAttribute("adminName",currentAdmin.getFirstName());
             session.setAttribute("admin",currentAdmin);
+            session.setAttribute("userStatus",currentAdmin.getEnable());
+
+            if(currentAdmin.getSuperadmin()==1){
+                session.setAttribute("superadmin",currentAdmin.getId());
+            }
             response.sendRedirect("/app/dashboard");
 
         } else {
@@ -42,6 +47,12 @@ public class Login extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if(session.getAttribute("error")!=null){
+            request.setAttribute("error",session.getAttribute("error"));
+        }
+
+        session.removeAttribute("error");
         getServletContext().getRequestDispatcher("/login.jsp")
                 .forward(request,response);
     }
