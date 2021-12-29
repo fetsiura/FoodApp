@@ -16,7 +16,7 @@ public class AdminDao {
     private static final String DELETE_ADMIN_QUERY = "DELETE FROM admins where id = ?;";
     private static final String FIND_ALL_ADMINS_QUERY = "SELECT * FROM admins;";
     private static final String READ_ADMIN_QUERY = "SELECT * from admins where id = ?;";
-    private static final String UPDATE_ADMIN_QUERY = "UPDATE admins SET first_name = ? , last_name = ?, email = ? , password = ?, superadmin = ? WHERE	id = ?;";
+    private static final String UPDATE_ADMIN_QUERY = "UPDATE admins SET first_name = ? , last_name = ?, email = ?, password = ?  WHERE	id = ?;";
 
     private Admins read(Integer adminId){
         Admins admin = new Admins();
@@ -121,9 +121,7 @@ public class AdminDao {
             statement.setString(2,admins.getLastName());
             statement.setString(3,admins.getEmail());
             statement.setString(4,BCrypt.hashpw(admins.getPassword(),BCrypt.gensalt()));
-            statement.setInt(5,admins.getSuperadmin());
-            statement.setInt(6,admins.getEnable());
-            statement.setInt(7,admins.getId());
+            statement.setInt(5,admins.getId());
             statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();

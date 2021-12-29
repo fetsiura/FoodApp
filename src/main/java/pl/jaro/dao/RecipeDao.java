@@ -19,12 +19,13 @@ public class RecipeDao {
     private static final String CREATE_RECIPE_QUERY = "INSERT INTO recipe(name,ingredients,description,preparation_time,preparation,admin_id,created,updated) VALUES (?,?,?,?,?,?,?,?);";
     private static final String DELETE_RECIPE_QUERY = "DELETE FROM recipe where id = ?;";
     private static final String FIND_ALL_RECIPES_QUERY = "select * from recipe where admin_id =?";
+    private static final String FIND_ALL_RECIPES = "select * from recipe";
     private static final String READ_RECIPE_QUERY = "SELECT * from recipe where id = ?;";
     private static final String UPDATE_RECIPE_QUERY = "UPDATE recipe SET name = ? , ingredients =?, description = ?, preparation_time = ?, preparation = ?, updated =? WHERE	id = ?;";
     private static final String ADD_RECIPE_PLAN ="INSERT INTO recipe_plan (recipe_id, meal_name, display_order, day_name_id, plan_id) VALUES (?, ?, ?, ?, ?)";
 
-    private static final String FIND_ALL_SORTED_DATE = "select * from recipe order by created desc;";
-    private static final String FIND_RECIPE_BY_NAME = "select * from recipe where name=?;";
+    private static final String FIND_ALL_SORTED_BY_DATE = "select * from recipe order by created desc;";
+    private static final String FIND_RECIPE_BY_NAME = "select * from recipe  where name like '?%' order by created desc;";
 
     public Recipe read(Integer recipeId) {
         Recipe recipe = new Recipe();
@@ -55,6 +56,90 @@ public class RecipeDao {
         List<Recipe> recipeList = new ArrayList<>();
         String query = FIND_ALL_RECIPES_QUERY.replace("?",String.valueOf(adminId));
 
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+               Recipe recipe =new Recipe();
+
+                recipe.setId(resultSet.getInt("id"));
+                recipe.setName(resultSet.getString("name"));
+                recipe.setIngredients(resultSet.getString("ingredients"));
+                recipe.setDescription(resultSet.getString("description"));
+                recipe.setCreated(resultSet.getString("created"));
+                recipe.setUpdated(resultSet.getString("updated"));
+                recipe.setPreparationTime(resultSet.getInt("preparation_time"));
+                recipe.setPreparation(resultSet.getString("preparation"));
+                recipe.setAdminId(resultSet.getInt("admin_id"));
+                recipeList.add(recipe);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipeList;
+
+    }
+    public List<Recipe> findAllNotLogin() {
+        List<Recipe> recipeList = new ArrayList<>();
+
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_RECIPES);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+               Recipe recipe =new Recipe();
+
+                recipe.setId(resultSet.getInt("id"));
+                recipe.setName(resultSet.getString("name"));
+                recipe.setIngredients(resultSet.getString("ingredients"));
+                recipe.setDescription(resultSet.getString("description"));
+                recipe.setCreated(resultSet.getString("created"));
+                recipe.setUpdated(resultSet.getString("updated"));
+                recipe.setPreparationTime(resultSet.getInt("preparation_time"));
+                recipe.setPreparation(resultSet.getString("preparation"));
+                recipe.setAdminId(resultSet.getInt("admin_id"));
+                recipeList.add(recipe);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipeList;
+
+    }
+    public List<Recipe> findAllSortedByDate() {
+        List<Recipe> recipeList = new ArrayList<>();
+
+        try (Connection connection = DbUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_SORTED_BY_DATE);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+               Recipe recipe =new Recipe();
+
+                recipe.setId(resultSet.getInt("id"));
+                recipe.setName(resultSet.getString("name"));
+                recipe.setIngredients(resultSet.getString("ingredients"));
+                recipe.setDescription(resultSet.getString("description"));
+                recipe.setCreated(resultSet.getString("created"));
+                recipe.setUpdated(resultSet.getString("updated"));
+                recipe.setPreparationTime(resultSet.getInt("preparation_time"));
+                recipe.setPreparation(resultSet.getString("preparation"));
+                recipe.setAdminId(resultSet.getInt("admin_id"));
+                recipeList.add(recipe);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recipeList;
+
+    }
+    public List<Recipe> findAllByName(String name) {
+        List<Recipe> recipeList = new ArrayList<>();
+        String query = FIND_RECIPE_BY_NAME.replace("?",name);
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
