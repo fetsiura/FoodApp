@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-const confirmButton = document.querySelectorAll('#confirmButton')
+const confirmButton = document.querySelectorAll('#buttonToDelete')
 
     confirmButton.forEach(   element => {
         element.addEventListener('click', ele=> {

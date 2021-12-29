@@ -20,7 +20,6 @@ public class About extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AdminDao adminDao = new AdminDao();
         List<Admins> all = adminDao.findAll();
-        System.out.println(all);
         getServletContext().getRequestDispatcher("/about.jsp")
                 .forward(request,response);
     }

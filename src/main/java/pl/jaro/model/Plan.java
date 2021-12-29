@@ -4,22 +4,21 @@ import java.time.LocalDateTime;
 
 public class Plan {
 
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private String created;
-    private int adminId;
+    private Integer adminId;
 
-    public Plan( String name, String description, int adminId) {
+    public Plan(Integer id, String name, String description, String created, Integer adminId) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.created = LocalDateTime.now().toString();
+        this.created = created;
         this.adminId = adminId;
     }
 
-    public Plan() {
-
-    }
+    public Plan(){}
 
     @Override
     public String toString() {
@@ -32,11 +31,11 @@ public class Plan {
                 '}';
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -64,11 +63,11 @@ public class Plan {
         this.created = created;
     }
 
-    public int getAdminId() {
+    public Integer getAdminId() {
         return adminId;
     }
 
-    public void setAdminId(int adminId) {
+    public void setAdminId(Integer adminId) {
         this.adminId = adminId;
     }
 }

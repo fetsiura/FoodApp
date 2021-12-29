@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet( "/app/recipe/plan/delete")
-public class DeleteRecipeFromPlan extends HttpServlet {
+public class RecipeDeleteFromPlan extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

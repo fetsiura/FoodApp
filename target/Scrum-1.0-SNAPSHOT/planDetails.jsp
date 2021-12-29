@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="static/headerLogin.jsp"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<script type="text/javascript" src="DeleteRecipeFromPlan.js"></script>
 
 <section class="dashboard-section">
     <div class="row dashboard-nowrap">
@@ -64,7 +64,6 @@
                             <td class="col-7">${detail.recipeName}</td>
                             <td class="col-1 center">
                                 <button id="buttonToDelete" name="${detail.id}" class="btn btn-danger rounded-0 text-light m-1">Usuń</button>
-
                             </td>
                             <td class="col-2 center">
                                 <a href="/app/recipe/details?id=${detail.recipeId}" class="btn btn-info rounded-0 text-light m-1">Szczegóły przepisu</a>

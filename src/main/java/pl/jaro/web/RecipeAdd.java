@@ -51,8 +51,6 @@ public class RecipeAdd extends HttpServlet {
             recipe.setPreparationTime(Integer.parseInt(preparationTime));
             recipe.setPreparation(preparation);
             recipe.setAdminId(admins.getId());
-
-            System.out.println(recipe.toString());
             recipeDao.create(recipe,admins.getId());
             response.sendRedirect("/app/recipe/list");
         }

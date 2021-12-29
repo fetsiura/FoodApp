@@ -2,11 +2,21 @@
 <%@include file="static/headerLogin.jsp"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<script type="text/javascript" src="DeletePlan.js"></script>
 
 <section class="dashboard-section">
     <div class="row dashboard-nowrap">
 
         <%@include file="static/leftMenu.jsp"%>
+
+        <c:if test="${not empty ifPlanDetailsExist}">
+            <script>
+                window.addEventListener("load",function(){
+                    alert("${ifPlanDetailsExist}");
+                })
+
+            </script>
+        </c:if>
         <c:if test="${not empty error}">
             <script>
                 window.addEventListener("load",function(){
@@ -44,7 +54,8 @@
                             <td class="col-7">
                                 ${plan.description}
                             </td>
-                            <td class="col-2 d-flex align-items-center justify-content-center flex-wrap"><a href="/app/plan/delete?id=${plan.id}" class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
+                            <td class="col-2 d-flex align-items-center justify-content-center flex-wrap">
+                                <button id="deletePlan" name="${plan.id}" class="btn btn-danger rounded-0 text-light m-1">Usuń</button>
                                 <a href="/app/plan/details?id=${plan.id}" class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
                                 <a href="/app/plan/edit?id=${plan.id}" class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
                             </td>

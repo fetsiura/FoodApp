@@ -65,7 +65,9 @@
                     <tr class="d-flex">
                         <td class="col-2">${plan.mealName}</td>
                         <td class="col-8">${plan.recipeName}</td>
-                        <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
+                        <td class="col-2">
+                            <a href="/app/recipe/details?id=${plan.recipeId}" class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
